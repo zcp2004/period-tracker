@@ -424,11 +424,15 @@ def serve_index():
 def serve_static(path):
     return send_from_directory(STATIC_DIR, path)
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({'status': 'ok'})
+
 # ====== Main ======
 
 if __name__ == '__main__':
     init_db()
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8890
+    port = int(os.environ.get('PORT', sys.argv[1] if len(sys.argv) > 1 else 8890))
     print(f"\n╔══════════════════════════════════════╗")
     print(f"║     乖宝生理期 - 服务器 v2.0         ║")
     print(f"╠══════════════════════════════════════╣")

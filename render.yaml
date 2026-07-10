@@ -5,4 +5,4 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python server.py 8890
     plan: free
-    healthCheckPath: /api/user
+    healthCheckPath: /health
