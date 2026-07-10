@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: period-tracker
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py 8890
+    plan: free
+    healthCheckPath: /api/user
