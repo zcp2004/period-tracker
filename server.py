@@ -433,8 +433,10 @@ def health_check():
 
 # ====== Main ======
 
+# Init DB on module load (needed for Vercel serverless)
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     port = int(os.environ.get('PORT', sys.argv[1] if len(sys.argv) > 1 else 8890))
     print(f"\n╔══════════════════════════════════════╗")
     print(f"║     乖宝生理期 - 服务器 v2.0         ║")
