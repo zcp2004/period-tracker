@@ -1,0 +1,48 @@
+{
+  "name": "乖宝生理期",
+  "short_name": "乖宝生理期",
+  "description": "为她定制的专属生理期追踪应用，记录周期、症状、情绪，AI分析并提供伴侣同步功能",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF5F7",
+  "theme_color": "#FF6B8A",
+  "scope": ".",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%23FF6B8A'/%3E%3Ctext x='96' y='130' text-anchor='middle' font-size='120'%3E💕%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='64' fill='%23FF6B8A'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-size='280'%3E💕%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["health", "lifestyle"],
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "快速记录经期",
+      "short_name": "记录经期",
+      "description": "一键记录今天来了",
+      "url": "index.html?quick=period",
+      "icons": []
+    },
+    {
+      "name": "记录症状",
+      "short_name": "记录症状",
+      "description": "快速记录今日状态",
+      "url": "index.html#log",
+      "icons": []
+    }
+  ]
+}

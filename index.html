@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#FF6B8A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<title>乖宝生理期</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app">
+  <div id="splash-screen">
+    <div class="splash-heart">💕</div>
+    <h1 class="splash-title">乖宝生理期</h1>
+    <p class="splash-subtitle">为爱而开发</p>
+    <div class="splash-loader"><div></div><div></div><div></div></div>
+  </div>
+  <div id="main-app" class="hidden">
+    <nav id="tab-bar">
+      <button class="tab-btn active" data-tab="calendar"><span class="tab-icon">📅</span><span class="tab-label">日历</span></button>
+      <button class="tab-btn" data-tab="log"><span class="tab-icon">📝</span><span class="tab-label">记录</span></button>
+      <button class="tab-btn" data-tab="diet"><span class="tab-icon">🍽️</span><span class="tab-label">饮食</span></button>
+      <button class="tab-btn" data-tab="qa"><span class="tab-icon">🤖</span><span class="tab-label">问答</span></button>
+      <button class="tab-btn" data-tab="stats"><span class="tab-icon">📊</span><span class="tab-label">统计</span></button>
+      <button class="tab-btn" data-tab="partner"><span class="tab-icon">💑</span><span class="tab-label">伴侣</span></button>
+      <button class="tab-btn tab-btn-boy hidden" data-tab="boyfriend"><span class="tab-icon">💑</span><span class="tab-label">伴侣数据</span></button>
+      <button class="tab-btn" data-tab="settings"><span class="tab-icon">⚙️</span><span class="tab-label">设置</span></button>
+    </nav>
+    <main id="main-content">
+      <section id="page-calendar" class="page active">
+        <div class="page-header"><h1>生理期日历</h1><p id="header-subtitle">记录你的周期</p></div>
+        <div id="phase-banner" class="phase-banner hidden"><span id="phase-icon"></span><div><span id="phase-title"></span><span id="phase-tip"></span></div></div>
+        <div class="timeline-bar" id="timeline-bar"><span class="tl-label" id="tl-label">周期第 -- 天</span><div class="tl-track"><div class="tl-fill" id="tl-fill" style="width:0%"></div></div></div>
+        <div class="calendar-container" id="calendar-container"></div>
+        <div class="stats-row" id="stats-row"><div class="stat-card"><span class="stat-val" id="stat-cycle">--</span><span class="stat-lbl">平均周期</span></div><div class="stat-card"><span class="stat-val" id="stat-period">--</span><span class="stat-lbl">平均经期</span></div><div class="stat-card"><span class="stat-val" id="stat-confidence">--</span><span class="stat-lbl">预测准确度</span></div></div>
+        <div class="analysis-cards" id="analysis-cards"></div>
+      </section>
+      <section id="page-log" class="page">
+        <div class="page-header"><h1>记录今日状态</h1><p id="log-date"></p></div>
+        <div id="log-phase-hint" class="phase-hint hidden"></div>
+        <div class="log-card"><h3>痛经程度</h3><div class="pain-slider-container"><input type="range" id="pain-level" min="0" max="10" value="0" class="pain-slider"><div class="pain-labels"><span>无</span><span>轻微</span><span>中度</span><span>严重</span></div><span id="pain-display" class="pain-display">0 级</span></div></div>
+        <div class="log-card"><h3>流量</h3><div class="option-group" id="flow-group"><button class="opt-btn active" data-value="0">无</button><button class="opt-btn" data-value="1">少量</button><button class="opt-btn" data-value="2">中等</button><button class="opt-btn" data-value="3">较多</button><button class="opt-btn" data-value="4">很多</button></div></div>
+        <div class="log-card"><h3>今日心情</h3><div class="mood-grid" id="mood-grid"><button class="mood-btn" data-mood="happy"><span>😊</span><span>开心</span></button><button class="mood-btn" data-mood="sad"><span>😢</span><span>难过</span></button><button class="mood-btn" data-mood="irritable"><span>😤</span><span>易怒</span></button><button class="mood-btn" data-mood="anxious"><span>😰</span><span>焦虑</span></button><button class="mood-btn" data-mood="calm"><span>😌</span><span>平静</span></button><button class="mood-btn" data-mood="tired"><span>😴</span><span>疲惫</span></button><button class="mood-btn" data-mood="emotional"><span>🥺</span><span>情绪化</span></button><button class="mood-btn" data-mood="energetic"><span>⚡</span><span>精力充沛</span></button></div></div>
+        <div class="log-card"><h3>症状标签</h3><div class="tag-group" id="tag-group"></div></div>
+        <div class="log-card"><h3>备注</h3><textarea id="log-note" placeholder="记录更多细节..." rows="3"></textarea></div>
+        <button id="btn-save-log" class="btn-primary btn-full">保存记录</button>
+      </section>
+      <section id="page-diet" class="page">
+        <div class="page-header"><h1>🍽️ 周期饮食建议</h1><p>根据生理周期推荐适合的食物</p></div>
+        <div id="diet-phase-card" class="diet-phase-card"></div>
+        <div class="diet-tabs">
+          <button class="diet-tab-btn active" data-dtab="recommend">🥗 饮食建议</button>
+          <button class="diet-tab-btn" data-dtab="log">📝 我的记录</button>
+        </div>
+        <div id="diet-recommend" class="diet-tab-content"></div>
+        <div id="diet-log" class="diet-tab-content hidden">
+          <button type="button" class="add-card" id="btn-add-meal" onclick="APP.openMealModal()"><span class="add-icon">+</span><span>记录今日饮食</span></button>
+          <div id="diet-filter" class="diet-filter">
+            <button class="diet-filter-btn active" data-filter="all">全部</button>
+            <button class="diet-filter-btn" data-filter="breakfast">早餐</button>
+            <button class="diet-filter-btn" data-filter="lunch">午餐</button>
+            <button class="diet-filter-btn" data-filter="dinner">晚餐</button>
+            <button class="diet-filter-btn" data-filter="snack">加餐</button>
+          </div>
+          <div id="diet-list" class="diet-list"></div>
+        </div>
+      </section>
+      <section id="page-qa" class="page">
+        <div class="page-header"><h1>🤖 健康问答</h1><p>解答身体症状的疑惑</p></div>
+        <div class="qa-container" id="qa-container">
+          <div class="qa-messages" id="qa-messages">
+            <div class="qa-msg qa-bot">你好！我是健康助手，可以帮你解答关于生理期、身体症状等方面的疑问。请问有什么可以帮助你的？</div>
+          </div>
+          <div class="qa-input-row">
+            <input type="text" id="qa-input" placeholder="输入你的问题..." class="qa-input">
+            <button id="btn-qa-send" class="btn-primary btn-qa-send">发送</button>
+          </div>
+        </div>
+      </section>
+      <section id="page-stats" class="page">
+        <div class="page-header"><h1>数据统计</h1><p>了解你的身体规律</p></div>
+        <div class="stat-card-full"><h3>周期趋势</h3><p class="stat-sub">最近6次周期长度变化</p><canvas id="cycle-chart"></canvas></div>
+        <div class="stat-card-full"><h3>症状频率</h3><p class="stat-sub">最常出现的症状</p><canvas id="symptom-chart"></canvas></div>
+        <div class="stat-card-full"><h3>痛经趋势</h3><p class="stat-sub">近30天疼痛变化</p><canvas id="pain-chart"></canvas></div>
+        <div class="stat-card-full"><h3>情绪分布</h3><div id="mood-distribution"></div></div>
+      </section>
+      <section id="page-partner" class="page">
+        <div class="page-header"><h1>💑 伴侣同步</h1><p>让爱更贴心</p></div>
+        <div id="partner-status" class="partner-status"></div>
+        <div class="partner-card"><h3>🔗 伴侣连接</h3><div id="partner-connect-area"></div></div>
+        <div class="partner-card"><h3>🤖 AI 分析建议</h3><div id="ai-suggestion-area"><p class="desc">点击按钮生成行动建议</p><button id="btn-ai-analyze" class="btn-primary">生成贴心提醒</button></div></div>
+        <div class="partner-card"><h3>📋 想要妈咪做什么</h3><p class="desc" style="margin-bottom:0">输入你想让TA做的事，会实时同步到伴侣端</p><div id="mami-tips"></div><div class="mami-input-row"><input type="text" id="mami-input" placeholder="例如：帮我买一杯红糖姜茶..." class="period-input" style="flex:1"><button id="btn-mami-send" class="btn-primary" style="padding:10px 20px">发送</button></div></div>
+        <div class="disclaimer">⚠️ 所有数据加密处理，伴侣端仅能看到周期阶段和建议</div>
+      </section>
+      <section id="page-boyfriend" class="page">
+        <div class="page-header"><h1>💑 她的周期</h1><p>查看伴侣的周期情况</p></div>
+        <div id="bf-status" class="phase-banner bf-authenticated hidden"><span id="bf-phase-icon"></span><div><span id="bf-phase-title"></span><span id="bf-phase-tip"></span></div></div>
+        <div class="calendar-container bf-authenticated" id="bf-calendar"></div>
+        <div id="bf-stats" class="stats-row bf-authenticated" style="margin:0 16px 12px"><div class="stat-card"><span class="stat-val" id="bf-stat-cycle">--</span><span class="stat-lbl">平均周期</span></div><div class="stat-card"><span class="stat-val" id="bf-stat-period">--</span><span class="stat-lbl">平均经期</span></div><div class="stat-card"><span class="stat-val" id="bf-stat-confidence">--</span><span class="stat-lbl">预测准确度</span></div></div>
+        <div id="bf-analysis" class="bf-authenticated analysis-cards"></div>
+        <div class="partner-card bf-authenticated"><h3>📋 她的待办</h3><div id="bf-mami-tips"><p class="desc">暂无消息</p></div></div>
+        <div class="partner-card bf-authenticated"><h3>🤖 AI 贴心提醒</h3><div id="bf-ai-area"><p class="desc">基于周期自动生成的关爱提醒</p><button id="btn-bf-ai" class="btn-primary" onclick="APP.generateBfSuggestion()">生成提醒</button></div></div>
+        <div id="bf-disconnected" class="hidden" style="margin:16px;padding:20px;background:var(--pink-light);border-radius:var(--radius);text-align:center">
+          <span style="font-size:40px;display:block;margin-bottom:8px">💔</span>
+          <p style="font-size:15px;font-weight:600;color:var(--pink)">尚未绑定伴侣</p>
+          <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">需要绑定后才能查看数据</p>
+          <button class="btn-primary" style="margin-top:12px" onclick="APP.showBindOverlay()">去绑定</button>
+        </div>
+      </section>
+      <section id="page-settings" class="page">
+        <div class="page-header"><h1>设置</h1><p>个性化你的使用体验</p></div>
+        <div class="settings-section"><h3 class="s-section-title">👤 账号</h3><div id="settings-account" class="setting-item" style="padding:14px 16px;flex-direction:column;align-items:flex-start;gap:8px"></div></div>
+        <div class="settings-section"><h3 class="s-section-title">🔒 隐私安全</h3><div class="setting-item"><div><span>任务切换模糊预览</span><span class="desc">切换应用时模糊屏幕</span></div><label class="switch"><input type="checkbox" id="setting-blur" checked><span class="slider"></span></label></div></div>
+        <div class="settings-section"><h3 class="s-section-title">🔔 通知提醒</h3><div class="setting-item"><div><span>经期提前提醒</span><span class="desc">提前1天和3小时发出通知</span></div><label class="switch"><input type="checkbox" id="setting-notify" checked><span class="slider"></span></label></div></div>
+        <div class="settings-section"><h3 class="s-section-title">💾 数据管理</h3><button id="btn-export" class="setting-action"><div><span>导出数据备份</span><span class="desc">下载JSON格式备份文件</span></div><span>›</span></button><button id="btn-import" class="setting-action"><div><span>导入数据恢复</span><span class="desc">从备份文件恢复数据</span></div><span>›</span></button><button id="btn-clear" class="setting-action danger"><div><span>清除所有数据</span><span class="desc">⚠️ 此操作不可撤销</span></div><span>›</span></button></div>
+        <div class="settings-section"><h3 class="s-section-title">🌐 服务器连接</h3><div class="setting-item" style="flex-direction:column;align-items:stretch;gap:8px"><div><span>API服务器地址</span><span class="desc">APK本地运行时需配置</span></div><div style="display:flex;gap:6px"><input type="text" id="setting-server-url" placeholder="http://192.168.2.53:8890" class="period-input" style="flex:1;padding:8px 12px;font-size:13px"><button id="btn-server-save" class="btn-primary" style="padding:8px 16px;font-size:13px">保存</button></div></div></div>
+        <div class="settings-section"><h3 class="s-section-title">🎨 个性化</h3><div class="setting-item"><div><span>深色模式</span><span class="desc">切换深色主题</span></div><label class="switch"><input type="checkbox" id="setting-dark"><span class="slider"></span></label></div></div>
+        <div class="version-info">乖宝生理期 v1.0.0<br>为爱而开发 💕</div>
+      </section>
+    </main>
+
+    <!-- Login / Register Overlay -->
+    <div id="login-overlay" class="modal-overlay hidden">
+      <div class="modal-content" style="max-width:320px">
+        <div class="modal-header"><h2>💕 乖宝生理期</h2><p>登录以同步数据给伴侣</p></div>
+        <div id="login-form">
+          <input type="tel" id="login-phone" placeholder="手机号" class="period-input" style="margin:8px 0;text-align:center">
+          <input type="password" id="login-password" placeholder="密码" class="period-input" style="margin:8px 0;text-align:center">
+          <button id="btn-login" class="btn-primary btn-full" style="margin:8px 0">登录</button>
+          <p style="margin:4px 0;font-size:13px;color:var(--text-secondary)">或</p>
+          <button id="btn-show-register" class="btn-text">创建新账号</button>
+        </div>
+        <div id="register-form" class="hidden">
+          <input type="tel" id="reg-phone" placeholder="手机号" class="period-input" style="margin:8px 0;text-align:center">
+          <input type="password" id="reg-password" placeholder="密码（至少6位）" class="period-input" style="margin:8px 0;text-align:center">
+          <div class="role-select" style="display:flex;gap:8px;margin:8px 0">
+            <button class="role-btn active" data-role="girl" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--pink);background:var(--pink-light);color:var(--pink);font-size:16px;font-weight:600;cursor:pointer">🌸 女生</button>
+            <button class="role-btn" data-role="boy" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--bg);color:var(--text-secondary);font-size:16px;font-weight:500;cursor:pointer">💪 男友</button>
+          </div>
+          <button id="btn-register" class="btn-primary btn-full" style="margin:8px 0">注册</button>
+          <button id="btn-show-login" class="btn-text">已有账号？登录</button>
+        </div>
+        <div id="user-info-bar" class="hidden" style="margin:8px 0;font-size:13px;color:var(--text-secondary)">
+          <p>已登录: <span id="user-phone-display"></span> (<span id="user-role-display"></span>)</p>
+          <p id="bound-info" class="hidden" style="margin-top:4px;font-size:12px;color:var(--pink)"></p>
+          <button id="btn-logout" class="btn-text" style="color:#E74C3C;margin-top:8px">退出登录</button>
+        </div>
+        <div id="login-error" class="hidden" style="margin:8px 0;padding:8px;background:#FFF0F0;border-radius:8px;color:#E74C3C;font-size:13px"></div>
+      </div>
+    </div>
+
+    <!-- Bind Overlay (for boyfriend entering bind code) -->
+    <div id="bind-overlay" class="modal-overlay hidden">
+      <div class="modal-content" style="max-width:320px">
+        <div class="modal-header"><h2>🔗 绑定伴侣</h2><p>输入她的绑定码以关联数据</p></div>
+        <input type="text" id="bind-code-input" placeholder="输入绑定码（如：A1B2C3D4）" class="period-input" style="margin:16px 0;text-align:center;font-size:18px;letter-spacing:4px;text-transform:uppercase">
+        <div style="display:flex;gap:8px">
+          <button id="btn-bind" class="btn-primary" style="flex:1">绑定</button>
+          <button id="btn-skip-bind" class="btn-secondary" style="flex:1">暂不绑定</button>
+        </div>
+        <p id="bind-error" class="hidden" style="margin:8px 0;padding:8px;background:#FFF0F0;border-radius:8px;color:#E74C3C;font-size:13px"></p>
+      </div>
+    </div>
+
+    <!-- Setup Wizard -->
+    <div id="setup-overlay" class="modal-overlay hidden">
+      <div class="modal-content" style="max-width:340px">
+        <div class="modal-header"><h2>🌸 欢迎使用</h2><p>先告诉你的周期情况，日历就能显示预测</p></div>
+        <div class="period-form" style="margin:16px 0">
+          <div class="period-form-group"><label>上次经期是哪天开始的？</label><input type="date" id="setup-period-start" class="period-input"></div>
+          <div class="period-form-group"><label>通常持续几天？</label><input type="number" id="setup-period-days" class="period-input" min="2" max="10" value="5"></div>
+          <div class="period-form-group"><label>平均周期多少天？（两次经期间隔）</label><input type="number" id="setup-cycle" class="period-input" min="21" max="45" value="28"></div>
+        </div>
+        <button id="btn-setup-save" class="btn-primary btn-full">开始使用</button>
+      </div>
+    </div>
+
+    <!-- Quick Action Panel (appears on date click) -->
+    <div id="quick-panel" class="quick-panel hidden">
+      <div class="qp-header"><span id="qp-date-label"></span><button class="qp-close" id="btn-qp-close">✕</button></div>
+      <div class="qp-body">
+        <button class="qp-btn qp-period" id="btn-qp-period">🩸 月经来了</button>
+        <div id="qp-ongoing-group" class="qp-ongoing-group" style="display:none">
+          <p class="qp-question">🩸 月经走了吗？</p>
+          <button class="qp-btn qp-still" id="btn-qp-still">🙋 月经还在</button>
+          <button class="qp-btn qp-gone" id="btn-qp-gone">✅ 月经走了</button>
+        </div>
+        <button class="qp-btn qp-detail" id="btn-qp-detail" onclick="APP.openDetailModal()">📋 记录详情</button>
+        <button class="qp-btn qp-cancel" id="btn-qp-cancel" style="display:none">✕ 取消标记</button>
+      </div>
+    </div>
+
+    <!-- Daily Detail Modal (mini log) -->
+    <div id="detail-modal" class="modal-overlay hidden">
+      <div class="modal-content detail-modal-content">
+        <div class="modal-header"><h2>📋 每日记录</h2><p id="detail-date-label"></p></div>
+        <div class="detail-form">
+          <div class="detail-section"><label>痛经程度</label><div class="dp-pain-row"><input type="range" id="dp-pain" min="0" max="10" value="0"><span id="dp-pain-display">0 级</span></div></div>
+          <div class="detail-section"><label>流量</label><div class="option-group" id="dp-flow"><button class="opt-btn active" data-v="0">无</button><button class="opt-btn" data-v="1">少量</button><button class="opt-btn" data-v="2">中等</button><button class="opt-btn" data-v="3">较多</button><button class="opt-btn" data-v="4">很多</button></div></div>
+          <div class="detail-section"><label>今日心情</label><div class="mood-grid" id="dp-mood"><button class="mood-btn" data-v="happy">😊 开心</button><button class="mood-btn" data-v="sad">😢 难过</button><button class="mood-btn" data-v="irritable">😤 易怒</button><button class="mood-btn" data-v="anxious">😰 焦虑</button><button class="mood-btn" data-v="calm">😌 平静</button><button class="mood-btn" data-v="tired">😴 疲惫</button><button class="mood-btn" data-v="emotional">🥺 情绪化</button><button class="mood-btn" data-v="energetic">⚡ 精力充沛</button></div></div>
+          <div class="detail-section"><label>症状标签</label><div class="tag-group" id="dp-tags"></div></div>
+          <div class="detail-section"><label>备注</label><textarea id="dp-note" placeholder="记录更多细节..." rows="2" class="period-input"></textarea></div>
+        </div>
+        <div class="period-modal-actions">
+          <button id="btn-dp-save" class="btn-primary" style="flex:1">保存</button>
+          <button id="btn-dp-cancel" class="btn-secondary" style="flex:1">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meal Editor Modal -->
+    <div id="meal-modal" class="modal-overlay hidden">
+      <div class="modal-content meal-modal-content">
+        <div class="modal-header"><h2>🍽️ 饮食记录</h2><p id="meal-modal-title">添加饮食记录</p></div>
+        <div class="meal-form">
+          <div class="meal-form-row">
+            <div class="meal-form-group" style="flex:1"><label>餐次</label><select id="meal-type" class="meal-input"><option value="breakfast">🥐 早餐</option><option value="lunch">🍛 午餐</option><option value="dinner">🍝 晚餐</option><option value="snack">🍪 加餐</option></select></div>
+            <div class="meal-form-group" style="flex:1"><label>日期</label><input type="date" id="meal-date" class="meal-input"></div>
+          </div>
+          <div class="meal-form-group"><label>食物内容</label><textarea id="meal-content" placeholder="吃了什么？例如：小米粥、鸡蛋、全麦面包..." rows="2" class="meal-input"></textarea></div>
+          <div class="meal-form-group"><label>拍照/上传图片</label><div class="meal-photo-row"><input type="file" id="meal-photo" accept="image/*" capture="environment" class="meal-photo-input"><label for="meal-photo" class="meal-photo-btn">📷 选择图片</label><span id="meal-photo-name" class="meal-photo-name"></span></div><div id="meal-photo-preview" class="meal-photo-preview hidden"><img id="meal-photo-img" class="meal-photo-img"><button id="btn-meal-photo-remove" class="meal-photo-remove">✕</button></div></div>
+          <div class="meal-form-group"><label>健康标签（可选）</label><div class="meal-tag-group" id="meal-tags"><button class="tag-btn" data-tag="健康">健康</button><button class="tag-btn" data-tag="油腻">油腻</button><button class="tag-btn" data-tag="辛辣">辛辣</button><button class="tag-btn" data-tag="甜食">甜食</button><button class="tag-btn" data-tag="外卖">外卖</button><button class="tag-btn" data-tag="自制">自制</button><button class="tag-btn" data-tag="素食">素食</button><button class="tag-btn" data-tag="高蛋白">高蛋白</button></div></div>
+          <div class="meal-form-group"><label>备注</label><textarea id="meal-note" placeholder="其他想记录的..." rows="2" class="meal-input"></textarea></div>
+        </div>
+        <div class="period-modal-actions">
+          <button id="btn-meal-save" class="btn-primary" style="flex:1">保存</button>
+          <button id="btn-meal-delete" class="btn-delete" style="display:none">删除</button>
+          <button id="btn-meal-cancel" class="btn-secondary" style="flex:1">取消</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Year-Month Picker -->
+    <div id="ym-picker" class="ym-picker-overlay hidden">
+      <div class="ym-picker"></div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
