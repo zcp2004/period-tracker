@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """乖宝生理期 - Backend Server with Auth, Roles, Binding, and Data Sync"""
 import os, sys, sqlite3, hashlib, json, uuid, datetime
+
+# Use /tmp for DB on Vercel (read-only filesystem elsewhere)
+DB_DIR = '/tmp' if os.environ.get('VERCEL') else '.'
 from functools import wraps
 from flask import Flask, request, jsonify, g, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')
+DB_PATH = os.path.join(DB_DIR, 'app.db')
 SECRET_KEY = 'guai-bao-secret-key-change-in-production'
 
 def get_db():
